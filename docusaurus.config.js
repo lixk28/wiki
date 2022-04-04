@@ -12,7 +12,7 @@ const config = {
   baseUrl: '/',
   onBrokenLinks: 'throw',
   onBrokenMarkdownLinks: 'warn',
-  favicon: 'img/kaf.png',
+  favicon: 'img/sio.png',
   organizationName: 'lixk28', // Usually your GitHub org/user name.
   projectName: 'wiki', // Usually your repo name.
   deploymentBranch: 'gh-pages',
