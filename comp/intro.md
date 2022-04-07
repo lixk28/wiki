@@ -1,5 +1,7 @@
 ---
-sidebar_position: 1
+sidebar_position: 0
 ---
 
-Nothing here.
+# Intro
+
+My notes for compiler principles and techniques.
