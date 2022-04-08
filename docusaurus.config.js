@@ -230,16 +230,18 @@ const config = {
           activeBaseRegex: 'db',
         },
         {
-          to: 'vim/intro',
-          label: 'vim',
+          label: 'Tools',
           position: 'left',
-          activeBaseRegex: 'vim',
-        },
-        {
-          to: 'git/intro',
-          label: 'git',
-          position: 'left',
-          activeBaseRegex: 'git',
+          items: [
+            {
+              to: 'vim/intro',
+              label: 'vim',
+            },
+            {
+              to: 'git/intro',
+              label: 'git',
+            },
+          ],
         },
         {
           href: 'https://github.com/lixk28/wiki',
