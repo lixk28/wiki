@@ -64,7 +64,7 @@ const config = {
         showLastUpdateTime: true,
         remarkPlugins: [math],
         rehypePlugins: [katex],
-        editUrl: 'https://github.com/lixk28/wiki',
+        editUrl: 'https://github.com/lixk28/wiki/tree/main',
       },
     ],
     [
@@ -80,7 +80,7 @@ const config = {
         showLastUpdateTime: true,
         remarkPlugins: [math],
         rehypePlugins: [katex],
-        editUrl: 'https://github.com/lixk28/wiki',
+        editUrl: 'https://github.com/lixk28/wiki/tree/main',
       },
     ],
     [
@@ -96,7 +96,7 @@ const config = {
         showLastUpdateTime: true,
         remarkPlugins: [math],
         rehypePlugins: [katex],
-        editUrl: 'https://github.com/lixk28/wiki',
+        editUrl: 'https://github.com/lixk28/wiki/tree/main',
       },
     ],
     [
@@ -112,7 +112,7 @@ const config = {
         showLastUpdateTime: true,
         remarkPlugins: [math],
         rehypePlugins: [katex],
-        editUrl: 'https://github.com/lixk28/wiki',
+        editUrl: 'https://github.com/lixk28/wiki/tree/main',
       },
     ],
     [
@@ -128,7 +128,7 @@ const config = {
         showLastUpdateTime: true,
         remarkPlugins: [math],
         rehypePlugins: [katex],
-        editUrl: 'https://github.com/lixk28/wiki',
+        editUrl: 'https://github.com/lixk28/wiki/tree/main',
       },
     ],
     [
@@ -144,7 +144,7 @@ const config = {
         showLastUpdateTime: true,
         remarkPlugins: [math],
         rehypePlugins: [katex],
-        editUrl: 'https://github.com/lixk28/wiki',
+        editUrl: 'https://github.com/lixk28/wiki/tree/main',
       },
     ],
     [
@@ -158,7 +158,7 @@ const config = {
         onlyIncludeVersions: ['current'],
         showLastUpdateAuthor: true,
         showLastUpdateTime: true,
-        editUrl: 'https://github.com/lixk28/wiki',
+        editUrl: 'https://github.com/lixk28/wiki/tree/main',
       },
     ],
     [
@@ -172,7 +172,7 @@ const config = {
         onlyIncludeVersions: ['current'],
         showLastUpdateAuthor: true,
         showLastUpdateTime: true,
-        editUrl: 'https://github.com/lixk28/wiki',
+        editUrl: 'https://github.com/lixk28/wiki/tree/main',
       },
     ],
   ],
