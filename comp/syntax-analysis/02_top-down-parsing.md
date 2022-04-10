@@ -22,6 +22,6 @@ for i = 1 to k:
     raise an error
 ```
 
+## Left Recursion and Its Elimination
 
-
-
+## Left Factoring

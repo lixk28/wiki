@@ -15,14 +15,14 @@ import ImageCenter from '@site/src/components/ImageCenter';
 - $S$：**开始符 (Start Symbol)**，单独从 $NT$ 中指定一个非终结符作为开始符，$S$ 所能生成的所有句子就是文法 $G$ 代表的语言 $L(G)$。按照惯例，开始符的产生式总是写在第一个。
 - $P$：**产生集 / 规则集 (Productions / Rules)**，文法 $G$ 中所有产生式的集合，CFG 的产生式具有 $NT \rightarrow (T \cup NT)^+$ 的形式，也就是说，产生式将一个非终结符替换为一个符号串。
 
-:::tip 巴科斯范式
+:::tip 巴科斯范式 (BNF)
 
 上下文无关文法的传统表示是巴科斯范式 (BNF, Backus Normal Form)，又称为巴科斯-诺尔范式 (BNF, Backus-Naur Form)。
 它是由美国著名计算机科学家 [John Backus](https://en.wikipedia.org/wiki/John_Backus)[^1] 和丹麦著名计算机科学家 [Peter Naur](https://en.wikipedia.org/wiki/Peter_Naur)[^2] 首先引入的用来描述计算机语言语法的符号集。
 
 :::
 
-:::note 算术表达式文法
+:::note 算术表达式文法 (Arithmetic Expression Grammar)
 
 $$
   \begin{aligned}
@@ -160,12 +160,84 @@ $$
 
 ## Ambiguity and Its Elimination
 
+对于一个上下文无关文法 $G$，如果 $G$ 存在一个句子有两种或两种以上的语法分析树 (或最左推导)，
+那么称文法 $G$ 是 **[二义性文法 (Ambiguous Grammar)](https://en.wikipedia.org/wiki/Ambiguous_grammar)**。
 
-## Left Recursion and Its Elimination
+与之相对的，如果文法 $G$ 的每个句子都只有唯一的语法分析树 (或最左推导)，
+那么称文法 $G$ 是 **非二义性文法 (Ambiguous Grammar)**。
+
+:::note 算术表达式文法 (Arithmetic Expression Grammar)
+
+考虑下面的算术表达式文法：
+$$
+  E \rightarrow E \ + \ E \ | \ E \ * \ E \ | \ ( \ E \ ) \ | \ e
+$$
+
+它允许串 $e + e * e$ 有两种不同最左推导：
+$$
+  \begin{aligned}
+    E &\Rightarrow E + E \\
+      &\Rightarrow e + E \\
+      &\Rightarrow e + E * E \\
+      &\Rightarrow e + e * E \\
+      &\Rightarrow e + e * e
+  \end{aligned}
+  \qquad
+  \begin{aligned}
+    E &\Rightarrow E * E \\
+      &\Rightarrow E + E * E \\
+      &\Rightarrow e + E * E \\
+      &\Rightarrow e + e * E \\
+      &\Rightarrow e + e * e \\
+  \end{aligned}
+$$
+
+这两种不同的最左推导对应的语法分析树分别为：
+
+<ImageCenter scale="75%">
+
+![ambiguous-parse-tree](assets/ambiguous_parse_tree.png)
+
+</ImageCenter>
+
+将它们的叶子节点从左到右写出来，可以发现表示的都是 $e + e * e$。
+
+注意到，(a) 反应的是通常情况下运算符 $*$ 和 $+$ 的优先级。
+(a) 实际上表示的是 $e + (e * e)$，而 (b) 表示的是  $(e + e) * e$。
+
+:::
+
+:::note 空悬 ELSE (Dangling Else)
+
+Dangling Else Grammar:
+$$
+  \begin{aligned}
+    \textit{stmt} &\rightarrow \ \textbf{if} \ \textit{expr} \ \textbf{then} \ stmt \\
+      &\ \ | \quad \textbf{if} \ \textit{expr} \ \textbf{then} \ \textit{stmt} \ \textbf{else} \ \text{stmt} \\
+      &\ \ | \quad \textbf{other}
+  \end{aligned}
+$$
+
+对于下面这个复合的条件语句：
+$$
+  \textbf{if} \ E_1 \ \textbf{then} \ S_1 \ \textbf{else} \ \textbf{if} \ E_2 \ \textbf{then} \ S_2 \ \textbf{else} \ S_3
+$$
+
+:::
+
+消除二义性的方法：
+- 指定优先级 (Specify precedence)
+  - The higher level of the production, the lower priority of operator.
+  - The lower level of the production, the higher priority of operator.
+- 指定结合性 (Specify associativity)
+  - If the operator is left associative, induce left recursion in its production.
+  - If the operator is right associative, induce right recursion in its production.
+
+:::info 为什么要消除文法的二义性？
 
 
-## Left Factoring
 
+:::
 
 [^1]: John Backus 领导发明设计了 FORTRAN 语言，被称为 FORTRAN 语言之父，他提出了 BNF，发明了函数式编程的概念及实践该概念的 FP 语言，为 1977 年图灵奖得主。
 [^2]: Peter Naur 协作开发了 BNF，为 2005 年图灵奖得主，也是目前唯一一位丹麦籍的得主。
