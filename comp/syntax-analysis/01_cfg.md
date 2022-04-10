@@ -9,7 +9,7 @@ import ImageCenter from '@site/src/components/ImageCenter';
 
 ## The Formal Definition of a Context-Free Grammar
 
-一个 **上下文无关文法 (CFG, Context-Free Grammar)** $G$ 是一个四元组 $(T, NT, S, P)$，其中：
+一个 **[上下文无关文法 (CFG, Context-Free Grammar)](https://en.wikipedia.org/wiki/Context-free_grammar)** $G$ 是一个四元组 $(T, NT, S, P)$，其中：
 - $T$：**终结符集 / 单词集 (Terminals / Terminal Symbols)**，就是词法分析中的 token，是语言 $L(G)$ 中的单词，终结符号是组成句子的基本单位。
 - $NT$：**非终结符集 (Nonterminals / Variables)**，是语法上的变量，表示了语言 $L(G)$ 层次化的结构，出现在 $G$ 的产生式中。
 - $S$：**开始符 (Start Symbol)**，单独从 $NT$ 中指定一个非终结符作为开始符，$S$ 所能生成的所有句子就是文法 $G$ 代表的语言 $L(G)$。按照惯例，开始符的产生式总是写在第一个。
@@ -150,11 +150,22 @@ $$
 - **叶子节点 (leaves)** 既可以是非终结符，也可以是终结符。
   - 将语法分析树的叶子从左到右排列就可以得到一个句型，称为这棵树的 **产出 (yield)** 或 **边缘 (frontier)**。
 
+在上面的例子中，$-\textbf{id} * (\textbf{id} + \textbf{id})$ 给出的最左推导和最右推导的语法分析树都是：
+
 <ImageCenter>
 
 ![parse-tree-example](assets/parse_tree_example.png)
 
 </ImageCenter>
+
+## Ambiguity and Its Elimination
+
+
+## Left Recursion and Its Elimination
+
+
+## Left Factoring
+
 
 [^1]: John Backus 领导发明设计了 FORTRAN 语言，被称为 FORTRAN 语言之父，他提出了 BNF，发明了函数式编程的概念及实践该概念的 FP 语言，为 1977 年图灵奖得主。
 [^2]: Peter Naur 协作开发了 BNF，为 2005 年图灵奖得主，也是目前唯一一位丹麦籍的得主。
