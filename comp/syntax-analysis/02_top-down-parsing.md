@@ -249,12 +249,12 @@ Given grammar $G(T, NT, S, P)$，$FIRST$ and $FOLLOW$ are defined as [^1]:
 
 计算给定文法 $G$ 所有非终结符 $A$ 的 $FOLLOW(A)$，重复下面的操作，直到所有的 $FOLLOW(A)$ 都不再变化：
 - 将 $\$$ 添加到 $FOLLOW(S)$ 中，其中 $S$ 是开始符号，$\$$ 是 EOF token。
-- 如果有产生式 $A \rightarrow \alpha B \beta$：
+- 如果有产生式 $A \rightarrow \alpha B \beta$ (其中 $B$ 是非终结符，$\alpha$、$\beta$ 是串，且 $\beta$ 非空)：
   - 如果 $\epsilon \notin FIRST(\beta)$，则将 $FIRST(\beta)$ 添加到 $FOLLOW(B)$ 中。
   - 如果 $\epsilon \in FIRST(\beta)$，则将 $FIRST(\beta) - \epsilon \cup FOLLOW(A)$ 添加到 $FOLLOW(B)$ 中。
 - 如果有产生式 $A \rightarrow \alpha B$，则将 $FOLLOW(A)$ 添加到 $FOLLOW(B)$ 中。
 
-:::EXAMPLE
+:::note EXAMPLE
 
 
 
@@ -287,6 +287,28 @@ LL(k) Parser Implementation:
 :::
 
 ### Construction of a Predictive Parsing Table
+
+给定文法 $G$，我们可以通过 $FIRST$ 和 $FOLLOW$ 构造出 **预测分析表 (Predictive Parsing Table)** $M$。
+$M$ 是一个二维数组，纵向索引是非终结符 $A$，横向索引是终结符或者 $\$$。
+$M[A, a]$ 代表的是，在当前处理的非终结符为 $A$、向前看一个的终结符为 $a$ 时，应该选择的产生式。
+
+给定文法 $G$，构造其预测分析表 $M$，对于 $G$ 中的每个产生式 $A \rightarrow \alpha$，
+- 如果 $\epsilon \notin FIRST(\alpha)$，那么对于 $FIRST(\alpha)$ 中的每个终结符 $a$，将 $A \rightarrow \alpha$ 添加到 $M[A, a]$。
+- 如果 $\epsilon \in FIRST(\alpha)$，那么对于 $FOLLOW(A)$ 中的每个终结符 $b$ (包括 $\$$，即 $\$$ 也视为终结符)，
+  将 $A \rightarrow \alpha$ 添加到 $M[A, b]$。
+  :::caution 注意
+
+  如果 $A$ 存在 $\epsilon$-production，即若 $\alpha = \epsilon$，
+  则有 $FIRST(\alpha) = FIRST(\epsilon) = \epsilon$，显然 $\epsilon \in FIRST(\alpha)$，
+  那么对于 $FOLLOW(A)$ 中的每个终结符 $b$ (包括 $\$$)，也要将 $A \rightarrow \epsilon$ 添加到 $M[A, b]$。
+
+  :::
+
+:::note EXAMPLE
+
+
+
+:::
 
 ### Table-Driven Predictive Parsing
 
