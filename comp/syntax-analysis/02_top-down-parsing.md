@@ -210,49 +210,49 @@ $$
 
 ## FIRST and FOLLOW
 
-构造 top-down parser 和 bottom-up parser 都需要用到两个辅助函数 $FIRST$ 和 $FOLLOW$，它们与给定的文法相关联。
+构造 top-down parser 和 bottom-up parser 都需要用到两个辅助函数 $\text{FIRST}$ 和 $\text{FOLLOW}$，它们与给定的文法相关联。
 
-在 top-down parsing 中，根据向前看符号，$FIRST$ 和 $FOLLOW$ 用于帮助选择应用哪个产生式。
+在 top-down parsing 中，根据向前看符号，$\text{FIRST}$ 和 $\text{FOLLOW}$ 用于帮助选择应用哪个产生式。
 
-Given grammar $G(T, NT, S, P)$，$FIRST$ and $FOLLOW$ are defined as [^1]:
-- $FIRST (\alpha)$: For any string $\alpha$ of gammar symbols (that is, $\alpha = (T \cup NT)^+$), $FIRST(\alpha)$ is the set of terminals that can appear at the very start of any string derived from $\alpha$.
+Given grammar $G(T, NT, S, P)$，$\text{FIRST}$ and $\text{FOLLOW}$ are defined as [^1]:
+- $\text{FIRST} (\alpha)$: For any string $\alpha$ of gammar symbols (that is, $\alpha = (T \cup NT)^+$), $\text{FIRST}(\alpha)$ is the set of terminals that can appear at the very start of any string derived from $\alpha$.
   Formally,
   $$
-    FIRST(\alpha) = \{ \ t \mid \alpha \xRightarrow{*} t \beta, \ t \in T \ \}
+    \text{FIRST}(\alpha) = \{ \ t \mid \alpha \xRightarrow{*} t \beta, \ t \in T \ \}
   $$
   where $\beta$ can be any string even $\epsilon$, while $T$ is the set of terminals in grammar $G$.
-  Especially, if $\alpha \xRightarrow{*} \epsilon$, then $\epsilon \in FIRST(\alpha)$ [^2].
-- $FOLLOW (A)$: For any nonterminal $A$, $FOLLOW(A)$ is the set of terminals that can appear immediately after $A$.
+  Especially, if $\alpha \xRightarrow{*} \epsilon$, then $\epsilon \in \text{FIRST}(\alpha)$ [^2].
+- $\text{FOLLOW} (A)$: For any nonterminal $A$, $\text{FOLLOW}(A)$ is the set of terminals that can appear immediately after $A$.
   Formally,
   $$
-    FOLLOW(A) = \{ \ t \mid S \xRightarrow{*} \alpha At \beta, \ t \in T \ \}
+    \text{FOLLOW}(A) = \{ \ t \mid S \xRightarrow{*} \alpha At \beta, \ t \in T \ \}
   $$
   where $\alpha$ can be any string even $\epsilon$, $\beta$ must be a non-empty string,
   while $S$ is the start symbol of $G$, $T$ is the set of terminals in $G$.
-  Especially, if $S \xRightarrow{*} \alpha A$, then $\$$ (or EOF) is in $FOLLOW(A)$.
+  Especially, if $S \xRightarrow{*} \alpha A$, then $\$$ (or EOF) is in $\text{FOLLOW}(A)$.
 
-计算给定文法 $G$ 所有符号 $X$ 的 $FIRST(X)$，重复下面的操作，直到所有的 $FIRST(X)$ 都不再变化：
-- 如果存在产生式 $X \rightarrow \epsilon$，那么将 $\epsilon$ 添加到 $FIRST(X)$。
-- 如果 $X$ 是终结符，那么 $FIRST(X) = \{ \ X \ \}$。
+计算给定文法 $G$ 所有符号 $X$ 的 $\text{FIRST}(X)$，重复下面的操作，直到所有的 $\text{FIRST}(X)$ 都不再变化：
+- 如果存在产生式 $X \rightarrow \epsilon$，那么将 $\epsilon$ 添加到 $\text{FIRST}(X)$。
+- 如果 $X$ 是终结符，那么 $\text{FIRST}(X) = \{ \ X \ \}$。
 - 如果 $X$ 是非终结符，遍历 $X$ 所有的产生式：
   $$
     X \rightarrow Y_1Y_2 \cdots Y_k
   $$
   其中，$Y_k$ 可以使是终结符或非终结符。
   对于 $X$ 的每个产生式，执行下面的操作：
-  1. 如果所有的 $FIRST(Y_i)$ 都含有 $\epsilon$，那么将 $\epsilon$ 添加到 $FIRST(X)$ 中。
-  2. 对于 $Y_i$，将 $FIRST(Y_i) - \epsilon$ 添加到 $FIRST(X)$ 中。
-  3. 再判断 $FIRST(Y_i)$ 中是否含有 $\epsilon$，如果有，$i = i + 1$，继续执行步骤 ii，否则结束并退出。
+  1. 如果所有的 $\text{FIRST}(Y_i)$ 都含有 $\epsilon$，那么将 $\epsilon$ 添加到 $\text{FIRST}(X)$ 中。
+  2. 对于 $Y_i$，将 $\text{FIRST}(Y_i) - \epsilon$ 添加到 $\text{FIRST}(X)$ 中。
+  3. 再判断 $\text{FIRST}(Y_i)$ 中是否含有 $\epsilon$，如果有，$i = i + 1$，继续执行步骤 ii，否则结束并退出。
 
-有了所有符号 $X$ 的 $FIRST(X)$，我们就可以计算任意符号串 $X_1X_2 \cdots X_n$ 了。
-计算符号串 $X_1X_2 \cdots X_n$ 的 $FIRST(X_1X_2 \cdots X_n)$ 的过程与计算非终结符的 $FIRST$ 的过程相同。
+有了所有符号 $X$ 的 $\text{FIRST}(X)$，我们就可以计算任意符号串 $X_1X_2 \cdots X_n$ 了。
+计算符号串 $X_1X_2 \cdots X_n$ 的 $\text{FIRST}(X_1X_2 \cdots X_n)$ 的过程与计算非终结符的 $\text{FIRST}$ 的过程相同。
 
-计算给定文法 $G$ 所有非终结符 $A$ 的 $FOLLOW(A)$，重复下面的操作，直到所有的 $FOLLOW(A)$ 都不再变化：
-- 将 $\$$ 添加到 $FOLLOW(S)$ 中，其中 $S$ 是开始符号，$\$$ 是 EOF token。
+计算给定文法 $G$ 所有非终结符 $A$ 的 $\text{FOLLOW}(A)$，重复下面的操作，直到所有的 $\text{FOLLOW}(A)$ 都不再变化：
+- 将 $\$$ 添加到 $\text{FOLLOW}(S)$ 中，其中 $S$ 是开始符号，$\$$ 是 EOF token。
 - 如果有产生式 $A \rightarrow \alpha B \beta$ (其中 $B$ 是非终结符，$\alpha$、$\beta$ 是串，且 $\beta$ 非空)：
-  - 如果 $\epsilon \notin FIRST(\beta)$，则将 $FIRST(\beta)$ 添加到 $FOLLOW(B)$ 中。
-  - 如果 $\epsilon \in FIRST(\beta)$，则将 $FIRST(\beta) - \epsilon \cup FOLLOW(A)$ 添加到 $FOLLOW(B)$ 中。
-- 如果有产生式 $A \rightarrow \alpha B$，则将 $FOLLOW(A)$ 添加到 $FOLLOW(B)$ 中。
+  - 如果 $\epsilon \notin \text{FIRST}(\beta)$，则将 $\text{FIRST}(\beta)$ 添加到 $\text{FOLLOW}(B)$ 中。
+  - 如果 $\epsilon \in \text{FIRST}(\beta)$，则将 $\text{FIRST}(\beta) - \epsilon \cup \text{FOLLOW}(A)$ 添加到 $\text{FOLLOW}(B)$ 中。
+- 如果有产生式 $A \rightarrow \alpha B$，则将 $\text{FOLLOW}(A)$ 添加到 $\text{FOLLOW}(B)$ 中。
 
 :::note EXAMPLE
 
@@ -288,19 +288,19 @@ LL(k) Parser Implementation:
 
 ### Construction of a Predictive Parsing Table
 
-给定文法 $G$，我们可以通过 $FIRST$ 和 $FOLLOW$ 构造出 **预测分析表 (Predictive Parsing Table)** $M$。
+给定文法 $G$，我们可以通过 $\text{FIRST}$ 和 $\text{FOLLOW}$ 构造出 **预测分析表 (Predictive Parsing Table)** $M$。
 $M$ 是一个二维数组，纵向索引是非终结符 $A$，横向索引是终结符或者 $\$$。
 $M[A, a]$ 代表的是，在当前处理的非终结符为 $A$、向前看一个的终结符为 $a$ 时，应该选择的产生式。
 
 给定文法 $G$，构造其预测分析表 $M$，对于 $G$ 中的每个产生式 $A \rightarrow \alpha$，
-- 如果 $\epsilon \notin FIRST(\alpha)$，那么对于 $FIRST(\alpha)$ 中的每个终结符 $a$，将 $A \rightarrow \alpha$ 添加到 $M[A, a]$。
-- 如果 $\epsilon \in FIRST(\alpha)$，那么对于 $FOLLOW(A)$ 中的每个终结符 $b$ (包括 $\$$，即 $\$$ 也视为终结符)，
+- 如果 $\epsilon \notin \text{FIRST}(\alpha)$，那么对于 $\text{FIRST}(\alpha)$ 中的每个终结符 $a$，将 $A \rightarrow \alpha$ 添加到 $M[A, a]$。
+- 如果 $\epsilon \in \text{FIRST}(\alpha)$，那么对于 $\text{FOLLOW}(A)$ 中的每个终结符 $b$ (包括 $\$$，即 $\$$ 也视为终结符)，
   将 $A \rightarrow \alpha$ 添加到 $M[A, b]$。
   :::caution 注意
 
   如果 $A$ 存在 $\epsilon$-production，即若 $\alpha = \epsilon$，
-  则有 $FIRST(\alpha) = FIRST(\epsilon) = \epsilon$，显然 $\epsilon \in FIRST(\alpha)$，
-  那么对于 $FOLLOW(A)$ 中的每个终结符 $b$ (包括 $\$$)，也要将 $A \rightarrow \epsilon$ 添加到 $M[A, b]$。
+  则有 $\text{FIRST}(\alpha) = \text{FIRST}(\epsilon) = \epsilon$，显然 $\epsilon \in \text{FIRST}(\alpha)$，
+  那么对于 $\text{FOLLOW}(A)$ 中的每个终结符 $b$ (包括 $\$$)，也要将 $A \rightarrow \epsilon$ 添加到 $M[A, b]$。
 
   :::
 
@@ -313,4 +313,4 @@ $M[A, a]$ 代表的是，在当前处理的非终结符为 $A$、向前看一个
 ### Table-Driven Predictive Parsing
 
 [^1]: The definition in Chinese is too nasty, English is easier to understand 😇.
-[^2]: This avoid defining $NULLABLE$ in the classic book "Modern Compiler Implementation".
+[^2]: This avoid defining $\text{NULLABLE}$ in the classic book "Modern Compiler Implementation".
