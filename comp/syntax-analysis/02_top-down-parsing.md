@@ -304,6 +304,12 @@ $M[A, a]$ 代表的是，在当前处理的非终结符为 $A$、向前看一个
 
   :::
 
+:::tip Select Set
+
+
+
+:::
+
 :::note EXAMPLE
 
 
@@ -337,6 +343,12 @@ report success; // stack is empty
 ```
 
 :::note EXAMPLE
+
+
+
+:::
+
+:::tip Why not use LL(0) or LL(k)
 
 
 
