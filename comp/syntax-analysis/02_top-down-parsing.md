@@ -310,7 +310,42 @@ $M[A, a]$ 代表的是，在当前处理的非终结符为 $A$、向前看一个
 
 :::
 
-### Table-Driven Predictive Parsing
+### Non-Recursive Predictive Parsing
+
+给定文法 $G$ 和符号串 $w\$$，借助于预测分析表 $M$ 和栈可以通过下面的方法构造出 table-drive predictive parser。
+
+初始状态：
+- 输入缓冲区：$w\$$
+- 栈：$S \ \$$ (栈顶为 $S$，$S$ 是 $G$ 的开始符号，栈底为 $\$$)
+
+```algorithm title="Table-Driven Predictive Parsing / LL(1) Parser"
+let a be the first symbol of w;
+let x be the top stack symbol;
+while (x != $): // stack is not empty
+  if (x == a):  // x matches the terminal a
+    pop the stack and let a be the next symbol of w;
+  else if (x is a terminal):  // x is a terminal and x is not a
+    report an error;
+  else if (M[x, a] is an error entry):
+    report an error;
+  else if (M[x, a] == X -> Y1Y2...Yk):
+    output the production X -> Y1Y2...Yk;
+    pop the stack;
+    push Yk, ..., Y1 onto the stack, with Y1 on the top;
+  let x be the top stack symbol;
+report success; // stack is empty
+```
+
+:::note EXAMPLE
+
+
+
+:::
+
+### Error Recovery
+
+- Panic Mode Recovery
+- Phrase-Level Recovery
 
 [^1]: The definition in Chinese is too nasty, English is easier to understand 😇.
 [^2]: This avoid defining $\text{NULLABLE}$ in the classic book "Modern Compiler Implementation".
