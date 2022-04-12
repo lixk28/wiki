@@ -25,6 +25,10 @@ const config = {
     [
       '@docusaurus/preset-classic',
       {
+        sitemap: {
+          changefreq: 'hourly',
+          priority: 0.5,
+        },
         docs: {
           routeBasePath: '/',
           path: 'home',
