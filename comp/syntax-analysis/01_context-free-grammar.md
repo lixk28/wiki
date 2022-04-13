@@ -239,5 +239,12 @@ $$
 
 :::
 
+:::tip [Is there any algorithm or method that can check whether a grammar is ambiguous?](https://en.wikipedia.org/wiki/Ambiguous_grammar#Recognizing_ambiguous_grammars)[^3]
+
+非常遗憾，任意一个文法是否是二义性的 [判定问题](https://en.wikipedia.org/wiki/Decision_problem) 已经被证明是 [不可判定的](https://en.wikipedia.org/wiki/Undecidable_problem)，它被证明与 [Post correspondence problem](https://en.wikipedia.org/wiki/Post_correspondence_problem) 等价。
+
+:::
+
 [^1]: John Backus 领导发明设计了 FORTRAN 语言，被称为 FORTRAN 语言之父，他提出了 BNF，发明了函数式编程的概念及实践该概念的 FP 语言，为 1977 年图灵奖得主。
 [^2]: Peter Naur 协作开发了 BNF，为 2005 年图灵奖得主，也是目前唯一一位丹麦籍的得主。
+[^3]: See also https://cstheory.stackexchange.com/questions/4352/how-is-proving-a-context-free-language-to-be-ambiguous-undecidable
