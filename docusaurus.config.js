@@ -155,8 +155,8 @@ const config = {
       '@docusaurus/plugin-content-docs',
       {
         id: 'vim',
-        path: 'vim',
-        routeBasePath: 'vim',
+        path: 'tools/vim',
+        routeBasePath: 'tools/vim',
         sidebarPath: require.resolve('./sidebars.js'),
         lastVersion: 'current',
         onlyIncludeVersions: ['current'],
@@ -169,8 +169,22 @@ const config = {
       '@docusaurus/plugin-content-docs',
       {
         id: 'git',
-        path: 'git',
-        routeBasePath: 'git',
+        path: 'tools/git',
+        routeBasePath: 'tools/git',
+        sidebarPath: require.resolve('./sidebars.js'),
+        lastVersion: 'current',
+        onlyIncludeVersions: ['current'],
+        showLastUpdateAuthor: true,
+        showLastUpdateTime: true,
+        editUrl: 'https://github.com/lixk28/wiki/tree/main',
+      },
+    ],
+    [
+      '@docusaurus/plugin-content-docs',
+      {
+        id: 'tmux',
+        path: 'tools/tmux',
+        routeBasePath: 'tools/tmux',
         sidebarPath: require.resolve('./sidebars.js'),
         lastVersion: 'current',
         onlyIncludeVersions: ['current'],
@@ -238,13 +252,17 @@ const config = {
           position: 'left',
           items: [
             {
-              to: 'vim/intro',
+              to: 'tools/vim/intro',
               label: 'vim',
             },
             {
-              to: 'git/intro',
+              to: 'tools/git/intro',
               label: 'git',
             },
+            {
+              to: 'tools/tmux/intro',
+              label: 'tmux',
+            }
           ],
         },
         {
