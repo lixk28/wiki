@@ -9,6 +9,20 @@ import ImageCenter from '@site/src/components/ImageCenter';
 
 ## Reductions
 
+**归约 (Reduction)** 是<u>推导的逆过程</u>。
+
+对于文法 $G$，如果有推导 $\alpha \xRightarrow{*} \beta$，则称 $\beta$ 可归约为 $\alpha$，或者 $\alpha$ 是 $\beta$ 的一个归约。
+特别的，如果有 $\alpha \Rightarrow \beta$，则称 $\beta$ 可直接归约为 $\alpha$，或者 $\alpha$ 是 $\beta$ 的一个 **直接归约 (Direct Reduction)**。
+
+- **最左归约 (Leftmost Reduction)**：最右推导的逆过程，也称为 **规范归约 (Canonical Reduction)**。
+- **最右归约 (Rightmost Reduction)**：最左推导的逆过程。
+
+:::note Example
+
+
+
+:::
+
 ## Handle
 
 对于文法 $G$，如果有 $S \xRightarrow[rm]{*} \alpha$ (其中 $S$ 是 $G$ 的开始符号)，则称 $\alpha$ 是 $G$ 的一个 **最右句型 (Right-Sentential Form)**。对于 **最左句型 (Left-Sentential Form)**，我们有完全类似的定义。
