@@ -91,13 +91,11 @@ $$
 - $\alpha \xRightarrow{*} \beta$: Derives in zero or more steps. Especially, $\alpha \xRightarrow{*} \alpha$ (zero step).
 - $\alpha \xRightarrow{+} \beta$: Derives in one or more steps.
 
-如果 $S \xRightarrow{*} \alpha$，其中 $S$ 是文法 $G$ 的开始符号，则称 $\alpha$ 是 $G$ 的一个 **句型 (Sentential Form)**。
+如果 $S \xRightarrow{*} \alpha$，其中 $S$ 是文法 $G$ 的开始符号，则称 $\alpha$ 是 $G$ 的一个 **句型 (Sentential Form)**。特别的，一个句子也是一个句型，<u>句子是不包含非终结符的句型</u>。
 
 :::info Note
 
 一个句型<u>可能既包含非终结符，又包含终结符，也可能是空串</u>。
-
-特别地，一个句子也是一个句型，<u>句子是不包含非终结符的句型</u>。
 
 :::
 
@@ -207,7 +205,7 @@ $$
 
 :::
 
-:::note 空悬 ELSE (Dangling Else)
+:::note 空悬 else (Dangling Else)
 
 Dangling Else Grammar:
 $$
@@ -233,13 +231,13 @@ $$
   - If the operator is left associative, induce left recursion in its production.
   - If the operator is right associative, induce right recursion in its production.
 
-:::info 为什么要消除文法的二义性？
+:::question 为什么要消除文法的二义性？
 
 
 
 :::
 
-:::tip [Is there any algorithm or method that can check whether a grammar is ambiguous?](https://en.wikipedia.org/wiki/Ambiguous_grammar#Recognizing_ambiguous_grammars)[^3]
+:::question [Is there any algorithm or method that can check whether a grammar is ambiguous?](https://en.wikipedia.org/wiki/Ambiguous_grammar#Recognizing_ambiguous_grammars)[^3]
 
 非常遗憾，任意一个文法是否是二义性的 [判定问题](https://en.wikipedia.org/wiki/Decision_problem) 已经被证明是 [不可判定的](https://en.wikipedia.org/wiki/Undecidable_problem)，它被证明与 [Post correspondence problem](https://en.wikipedia.org/wiki/Post_correspondence_problem) 等价。
 

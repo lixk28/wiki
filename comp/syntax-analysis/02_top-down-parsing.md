@@ -7,7 +7,7 @@ import Highlight from '@site/src/components/Highlight';
 
 # Top-Down Parsing
 
-:::tip What is parsing?
+:::question What is parsing?
 
 文法递归定义了一种语言的语法，**语法分析器 (Parser)** 的工作就是根据定义的文法，将词法分析器输出的 token list
 作为输入 (token list 就相当于语言的一个句子)，构造出 token list 的推导。
@@ -51,7 +51,7 @@ for i = 1 to k:
 
 RDP 实现上比较简单，容易手写，但是可能会需要指数级时间。
 
-:::note EXAMPLE
+:::note Example
 
 
 
@@ -109,7 +109,7 @@ RDP 实现上比较简单，容易手写，但是可能会需要指数级时间�
     \end{aligned}
   $$
 
-:::note EXAMPLE
+:::note Example
 
 考虑下面的算术表达式文法：
 $$
@@ -144,7 +144,13 @@ for each i from 1 to n:
   eliminate the direct left recursion among the Ai-productions
 ```
 
-:::note EXAMPLE
+:::note Example
+
+
+
+:::
+
+:::tip 递归文法
 
 
 
@@ -203,7 +209,7 @@ $$
   \end{aligned}
 $$
 
-:::note EXAMPLE
+:::note Example
 
 
 :::
@@ -254,13 +260,13 @@ Given grammar $G(T, NT, S, P)$，$\text{FIRST}$ and $\text{FOLLOW}$ are defined 
   - 如果 $\epsilon \in \text{FIRST}(\beta)$，则将 $\text{FIRST}(\beta) - \epsilon \cup \text{FOLLOW}(A)$ 添加到 $\text{FOLLOW}(B)$ 中。
 - 如果有产生式 $A \rightarrow \alpha B$，则将 $\text{FOLLOW}(A)$ 添加到 $\text{FOLLOW}(B)$ 中。
 
-:::note EXAMPLE
+:::note Example
 
 
 
 :::
 
-:::tip Why Need First and Follow?
+:::question Why Need First And Follow?
 
 
 
@@ -296,7 +302,7 @@ $M[A, a]$ 代表的是，在当前处理的非终结符为 $A$、向前看一个
 - 如果 $\epsilon \notin \text{FIRST}(\alpha)$，那么对于 $\text{FIRST}(\alpha)$ 中的每个终结符 $a$，将 $A \rightarrow \alpha$ 添加到 $M[A, a]$。
 - 如果 $\epsilon \in \text{FIRST}(\alpha)$，那么对于 $\text{FOLLOW}(A)$ 中的每个终结符 $b$ (包括 $\$$，即 $\$$ 也视为终结符)，
   将 $A \rightarrow \alpha$ 添加到 $M[A, b]$。
-  :::caution 注意
+  :::info Note
 
   如果 $A$ 存在 $\epsilon$-production，即若 $\alpha = \epsilon$，
   则有 $\text{FIRST}(\alpha) = \text{FIRST}(\epsilon) = \epsilon$，显然 $\epsilon \in \text{FIRST}(\alpha)$，
@@ -310,7 +316,7 @@ $M[A, a]$ 代表的是，在当前处理的非终结符为 $A$、向前看一个
 
 :::
 
-:::note EXAMPLE
+:::note Example
 
 
 
@@ -342,13 +348,13 @@ while (x != $): // stack is not empty
 report success; // stack is empty
 ```
 
-:::note EXAMPLE
+:::note Example
 
 
 
 :::
 
-:::tip Why not use LL(0) or LL(k)
+:::question Why not use LL(0) or LL(k)
 
 
 

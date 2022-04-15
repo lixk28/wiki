@@ -70,6 +70,12 @@ $$
 
 :::
 
+:::question Why Handle?
+
+
+
+:::
+
 ## Shift-Reduce Parsing
 
 ## LR Parsers
