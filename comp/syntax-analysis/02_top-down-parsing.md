@@ -336,6 +336,22 @@ $$
 
 :::
 
+:::question How To Identify Whether A Grammar Is LL(1)?[^3]
+
+一个文法是 LL(1) 的当且仅当它既没有 FIRST/FIRST conflicts，也没有 FIRST/FOLLOW conflicts。
+
+给定文法 $G$，对于非终结符 $A$ 的所有产生式 $A \rightarrow \alpha_1 \mid \alpha_2 \mid \cdots \mid \alpha_n$：
+- no FIRST/FIRST conflicts
+  对于任意的 $\alpha_i$ 和 $\alpha_j$ ($i \neq j$)，都有 $\text{FIRST}(\alpha_i) \cap \text{FIRST}(\alpha_j) = \emptyset$，那么 $A$ 就没有 FIRST/FIRST 冲突。
+- no FIRST/FOLLOW conflicts
+  对于任意的 $\alpha_i$，如果 $\epsilon \in \text{FIRST}(\alpha_i)$，都有 $\text{FIRST}(\alpha_j) \cap \text{FOLLOW}(A) = \emptyset$，其中 $j \neq i$，那么 $A$ 就没有 FIRST/FOLLOW 冲突。
+
+用 SELECT 表示的话，文法 $G$ 是 LL(1) 的当且仅当对于非终结符 $A$ 的所有产生式 $A \rightarrow \alpha_1 \mid \alpha_2 \mid \cdots \mid \alpha_n$，都有 $\text{SELECT}(\alpha_i) \cap \text{SELECT}(\alpha_j) = \emptyset$，其中 $i \neq j$。
+
+更加简单地说，就是 <u>构造出的预测分析表的每一个表项最多有一个产生式</u>。
+
+:::
+
 ### Non-Recursive Predictive Parsing
 
 给定文法 $G$ 和符号串 $w\$$，借助于预测分析表 $M$ 和栈可以通过下面的方法构造出 table-drive predictive parser。
@@ -381,3 +397,4 @@ report success; // stack is empty
 
 [^1]: The definition in Chinese is too nasty, English is easier to understand 😇.
 [^2]: This avoid defining $\text{NULLABLE}$ in the classic book "Modern Compiler Implementation".
+[^3]: See also https://stackoverflow.com/questions/8496642/how-to-identify-whether-a-grammar-is-ll1-lr0-or-slr1
