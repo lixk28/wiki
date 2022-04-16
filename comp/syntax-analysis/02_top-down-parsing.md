@@ -266,7 +266,12 @@ Given grammar $G(T, NT, S, P)$，$\text{FIRST}$ and $\text{FOLLOW}$ are defined 
 
 :::
 
-:::question Why Need First And Follow?
+:::tip NULLABLE
+
+
+:::
+
+:::question Why Need FIRST And FOLLOW?
 
 
 
@@ -300,19 +305,28 @@ $M[A, a]$ 代表的是，在当前处理的非终结符为 $A$、向前看一个
 
 给定文法 $G$，构造其预测分析表 $M$，对于 $G$ 中的每个产生式 $A \rightarrow \alpha$，
 - 如果 $\epsilon \notin \text{FIRST}(\alpha)$，那么对于 $\text{FIRST}(\alpha)$ 中的每个终结符 $a$，将 $A \rightarrow \alpha$ 添加到 $M[A, a]$。
-- 如果 $\epsilon \in \text{FIRST}(\alpha)$，那么对于 $\text{FOLLOW}(A)$ 中的每个终结符 $b$ (包括 $\$$，即 $\$$ 也视为终结符)，
+- 如果 $\epsilon \in \text{FIRST}(\alpha)$，那么对于 $\text{FIRST}(\alpha) - \epsilon \cup \text{FOLLOW}(A)$ 中的每个终结符 $b$ (包括 $\$$，即 $\$$ 也视为终结符)，
   将 $A \rightarrow \alpha$ 添加到 $M[A, b]$。
   :::info Note
 
   如果 $A$ 存在 $\epsilon$-production，即若 $\alpha = \epsilon$，
   则有 $\text{FIRST}(\alpha) = \text{FIRST}(\epsilon) = \epsilon$，显然 $\epsilon \in \text{FIRST}(\alpha)$，
-  那么对于 $\text{FOLLOW}(A)$ 中的每个终结符 $b$ (包括 $\$$)，也要将 $A \rightarrow \epsilon$ 添加到 $M[A, b]$。
+  那么对于 $\text{FOLLOW}(A)$ (这时候 $\text{FIRST}(\alpha) - \epsilon \cup \text{FOLLOW}(A) = \text{FOLLOW}(A)$) 中的每个终结符 $b$ (包括 $\$$)，也要将 $A \rightarrow \epsilon$ 添加到 $M[A, b]$。
 
   :::
 
 :::tip Select Set
 
+在有些编译原理的书籍中，会定义产生式的 $\text{SELECT}$ 集，表示如果当前的非终结符为 $A$，向前看符号 $\text{lookahead} \in \text{SELECT}(A \rightarrow \alpha)$，就选择产生式 $A \rightarrow \alpha$。
+这实际上跟我们上面确定预测分析表的过程是等价的。
 
+$$
+  \text{SELECT}(A \rightarrow \alpha) =
+  \begin{cases}
+    \text{FIRST}(\alpha) & \epsilon \notin \text{FIRST}(\alpha) \\
+    \text{FIRST}(\alpha) - \epsilon \cup \text{FOLLOW}(A) & \epsilon \in \text{FIRST}(\alpha)
+  \end{cases}
+$$
 
 :::
 
@@ -354,7 +368,7 @@ report success; // stack is empty
 
 :::
 
-:::question Why not use LL(0) or LL(k)
+:::question Why not use LL(0) or LL(k)?
 
 
 
