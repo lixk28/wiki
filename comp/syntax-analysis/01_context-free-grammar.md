@@ -139,7 +139,7 @@ $$
 我们称 $\alpha$ 是文法 $G$ 的一个 **最左句型 (Left-Sentential Form) (或最右句型, Right-Sentential Form)**。
 
 最右推导有时也称为 **规范推导 (Canonical Derivation)**，在后面我们会看到，最右推导与自底向上语法分析相关。
-最左推导则对应于自顶向下构造语法分析树的过程。
+最左推导则对应于自顶向下构造语法分析树的过程。由规范推导得到的句型称为 **规范句型 (Canonical Sentential Form)**。
 
 ## Parse Trees
 
