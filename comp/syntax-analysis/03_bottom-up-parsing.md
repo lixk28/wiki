@@ -4,8 +4,11 @@ sidebar_position: 3
 ---
 
 import ImageCenter from '@site/src/components/ImageCenter';
+import Highlight from '@site/src/components/Highlight';
 
 # Bottom-Up Parsing
+
+**自底向上语法分析 (Bottom-Up Parsing)** 从叶子开始，通过不断向上归约构造语法树。自底向上语法分析等价于找到输入符号串的一个最左归约。
 
 ## Reductions
 
@@ -32,6 +35,12 @@ import ImageCenter from '@site/src/components/ImageCenter';
 特别的，如果 $S \xRightarrow{*} xAy \Rightarrow x \alpha y$，则称 $\alpha$ 是 **简单短语/直接短语 (Simple Phrase)**。
 
 一个句型的 <u>最左简单短语 (leftmost simple phrase)</u> 被称为这个句型的 **句柄 (Handle)**。
+
+:::note Note
+
+如果仅仅有 $A \xRightarrow{+} \alpha$，并不能说明 $\alpha$ 就是句型 $xAy$ 关于 $A$ 的一个短语，还必须要有 $S \xRightarrow{*} xAy$。
+
+:::
 
 :::tip From the View of Parse Tree
 
@@ -78,7 +87,49 @@ $$
 
 ## Shift-Reduce Parsing
 
+句柄总是会出现在栈顶，而不会在栈的内部。
+
+| Stack | Input | Action |
+| ----- | ----- | ------ |
+| $\$$ | $\text{i}_1 * \text{i}_2 + \text{i}_3 \ \$$ | shift |
+| $\$\ \text{i}_1$ | $* \text{i}_2 + \text{i}_3 \ \$$ | reduce by $F \rightarrow \text{i}_1$ |
+| $\$\ F$ | $* \text{i}_2 + \text{i}_3 \ \$$ | reduce by $T \rightarrow F$ |
+| $\$\ T$ | $* \text{i}_2 + \text{i}_3 \ \$$ | shift |
+| $\$\ T *$ | $\text{i}_2 + \text{i}_3 \ \$$ | shift |
+| $\$\ T * \text{i}_2$ | $+ \text{i}_3 \ \$$ | reduce by $F \rightarrow \text{i}_2$ |
+| $\$\ T * F$ | $+ \text{i}_3 \ \$$ | reduce by $T \rightarrow T * F$ |
+| $\$\ T$ | $+ \text{i}_3 \ \$$ | reduce by $E \rightarrow T$ |
+| $\$\ E$ | $+ \text{i}_3 \ \$$ | shift |
+| $\$\ E +$ | $\text{i}_3 \ \$$ | shift |
+| $\$\ E + \text{i}_3$ | $\$$ | reduce by $F \rightarrow \text{i}_3$ |
+| $\$\ E + F$ | $\$$ | reduce by $T \rightarrow F$ |
+| $\$\ E + T$ | $\$$ | reduce by $E \rightarrow E + T$ |
+| $\$\ E$ | $\$$ | accept |
+
+- Shift/Reduce Conflict
+- Reduce/Reduce Conflict
+
 ## LR Parsers
+
+LR(k): Parsers of LR family.
+- **L**: Scan input from <Highlight color="#3578e5">l</Highlight>eft to right.
+- **R**: Construct a <Highlight color="#3578e5">r</Highlight>ightmost derivation in reverse.
+- **k**: Use <Highlight color="#3578e5">k</Highlight> input symbols of lookahead to make decisions.
+  - k = 0 or 1 are of particular interests, k is assumed to be 1 when omitted.
+
+:::question Why LR Parsers?
+
+LR(k) VS LL(k):
+- LR(k) is more powerful than LL(k).
+  - LR parsers can be constructed to recognize virtually all programming-language constructs for which context-free grammars can be written. Non- LR context-free grammars exist, but these can generally be avoided for typical programming-language constructs.
+  - The class of grammars that can be parsed using LR methods is a proper superset (真超集) of the class of grammars that can be parsed with predictive or LL methods. LL(k) $\subset$ LR(k).
+  - Eliminating left recursion or left factoring is not needed.
+- LR(k) is as efficient as LL(k).
+  - Linear in time and space to length of input, same as LL(k).
+- LR(k) is as convenient as LL(k).
+  - Can generate automatically from grammar (YACC, Bison).
+
+:::
 
 ### LR(0)
 
