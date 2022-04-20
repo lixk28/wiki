@@ -131,9 +131,180 @@ LR(k) VS LL(k):
 
 :::
 
+我们接下来要讨论的 LR 分析本质上都是寻找给定符号串的规范归约。
+规范归约的关键问题是确定和寻找句柄。
+
 ### LR(0)
 
+**活前缀/可行前缀 (Viable Prefix)** 指的是规范句型的一个前缀，这种前缀不含句柄之后的任何符号。
+之所以称为活前缀，是因为在右边添加一些终结符之后，就可以使它成为一个规范句型。
+
+:::info
+
+在 LR 分析过程中的任何时候，<u>栈里的符号串 (自底向上) 应该构成活前缀</u>，如果把输入串的剩余部分加在后边应成为规范句型。
+
+:::
+
+LR 分析通过维护一系列状态，来跟踪当前的分析阶段，进而决定是移进还是归约。
+一个状态实际上代表一个项目集。
+
+文法 $G$ 的一个 **项目 (Item)** 是 $G$ 的一个产生式，产生式右部的某个位置有一个点 (dot)。项目通常也被称为 LR(0) 项目。
+
+比如说，产生式 $A \rightarrow XYZ$ 可形成 4 个项目：
+
+$$
+  \begin{aligned}
+    A &\rightarrow \cdot XYZ  \\
+    A &\rightarrow X \cdot YZ \\
+    A &\rightarrow XY \cdot Z \\
+    A &\rightarrow XYZ \cdot  \\
+  \end{aligned}
+$$
+
+:::tip
+
+直观上说，一个项目指明了在分析过程中的某一时刻我们看到产生式的多大一部分。
+例如，$A \rightarrow \cdot XYZ$ 意味着，我们希望从后面的输入串中看到可以由 $XYZ$ 推导出的符号串。
+$A \rightarrow X \cdot YZ$ 意味着，我们已经从输入串中看到能由 $X$ 推出的符号串，接下来希望看到可以由 $YZ$ 推出的符号串。$A \rightarrow XYZ \cdot$ 意味着，我们已经看到了产生式体 $XYZ$，或许应该将 $XYZ$ 归约到 $A$。
+
+:::tip
+
+对于文法 $G$，其开始符号为 $S$，通过添加一个产生式 $S^{\prime} \rightarrow S$，并令开始符号为 $S^{\prime}$，得到的文法 $G^{\prime}$ 称为 $G$ 的 **增广文法 (Augmented Grammar)** $G^{\prime}$。
+
+:::tip
+
+这样做的目的是，可以使接受状态易于识别，确保了 parse table 中只有一个 accept 表项，只有这个新添加的产生式可以告知分析器什么时候应该停止解析，宣布接受输入符号串。
+
+:::
+
+对于文法 $G$，如果 $I$ 一个项目集，**项目集的闭包 (Closure of Item Sets)** $\text{CLOSURE}(I)$ 由下面的规则进行构造：
+1. 初始时，$I$ 的任何项目都属于 $\text{CLOSURE}(I)$。
+2. 若 $A \rightarrow \alpha \cdot B \beta$ 属于 $I$，则对于任何关于 $B$ 的产生式 $B \rightarrow \gamma$，项目 $B \rightarrow \cdot \gamma$ 也属于 $I$。重复应用这条规则，直到没有任何新的项目可以添加到 $\text{CLOSURE}(I)$。
+
+:::tip
+
+直观上说，$A \rightarrow \alpha \cdot B \beta$ 属于 $\text{CLOSURE}(I)$ 意味着，在分析过程中的某个时刻，我们期望接下来看到的是可以由 $B \beta$ 推出的符号串。这个符号串一定会有一个由 $B$ 推出的前缀，因此对于所有的 $B$-productions $B \rightarrow \gamma$，也将 $B \rightarrow \cdot \gamma$ 加入到 $\text{CLOSURE}(I)$。
+
+:::
+
+:::note Example
+
+考虑增广算术表达式文法：
+$$
+  \begin{aligned}
+    E^{\prime} &\rightarrow E \\
+    E &\rightarrow E + T \mid E - T \mid T \\
+    T &\rightarrow T * F \mid T / F \mid F \\
+    F &\rightarrow ( \ E \ ) \mid \textbf{id}
+  \end{aligned}
+$$
+
+如果 $I = \lbrace E^{\prime} \rightarrow E \rbrace$，则 $\text{CLOSURE}(I)$ 包含：
+$$
+  \begin{aligned}
+    E^{\prime} &\rightarrow \cdot E \\
+    E &\rightarrow \cdot E + T \\
+    E &\rightarrow \cdot E - T \\
+    E &\rightarrow \cdot T \\
+    T &\rightarrow \cdot T * F \\
+    T &\rightarrow \cdot T / F \\
+    T &\rightarrow \cdot F \\
+    F &\rightarrow \cdot \lparen E \rparen \\
+    F &\rightarrow \cdot \textbf{id}
+  \end{aligned}
+$$
+
+:::
+
+状态转换函数表示为 $\text{GOTO}[I, X]$，其中 $I$ 代表一个项目集，$X$ 是一个文法符号。
+$$
+  \text{GOTO}[I, X] = \text{CLOSURE}(J)
+$$
+其中 $J = \lbrace A \rightarrow \alpha X \cdot \beta \mid A \rightarrow \alpha \cdot X \beta \in I \rbrace$。
+
+:::tip
+
+直观上说，$\text{GOTO}$ 函数是用来定义 LR(0) 自动机的状态转换的，自动机的状态代表项目集，$\text{GOTO}(I, X)$ 确定了在当前状态为 $I$，输入为 $X$ 时，应跳转到什么状态。
+
+:::
+
+:::note Example
+
+对于上面的增广算术表达式文法，设 $I = \lbrace E^{\prime} \rightarrow E \cdot, \ E \rightarrow E \cdot + T \rbrace$，则 $\text{GOTO}(I, +)$ 包含：
+$$
+  \begin{aligned}
+    E &\rightarrow E + \cdot T \\
+    T &\rightarrow \cdot T * F \\
+    T &\rightarrow \cdot T / F \\
+    T &\rightarrow \cdot F \\
+    F &\rightarrow \cdot \lparen E \rparen \\
+    F &\rightarrow \cdot \textbf{id}
+  \end{aligned}
+$$
+
+:::
+
+接下来，给定文法 $G$ 的增广文法 $G^{\prime}$，我们就可以利用 $\text{CLOSURE}$ 和 $\text{GOTO}$ 来构造 **LR(0) 项目集规范族 (Canonical Collection of Sets of LR(0) Items)** $C$。
+
+```algorithm Construction of Canonical Collection of Sets of LR(0) Items
+ItemSets(G')  // G' is the agumented grammar
+{
+  C = { CLOSURE({S' -> ·S}) };  // C is the canonical collection of sets of LR(0) items
+  repeat:
+    for (each set of items I in C):
+      for (each grammar symbol X):
+        if (GOTO(I, X) is not empty and not in C)
+          add GOTO(I, X) to C;
+  until: no new sets of items are added to C on a round;
+}
+```
+
+LR(0) 自动机 (LR(0) Automaton)
+- 自动机的状态 $j$ 对应 LR(0) 规范族 $C$ 中的项目集 $I_j$。我们说 state $j$ 就代表 $I_j$。
+- 自动机的状态转换由 $\text{GOTO}$ 函数给出。$\text{GOTO}(I_j, X) = I_k$ 表示状态 $j$ 到状态 $k$ 有一条 $X$ 边。
+- 自动机的起始状态是 $\text{CLOSURE}({S^{\prime} \rightarrow \cdot S})$，所有的状态都是接受状态。
+
+:::question What Is The Use Of LR(0) Automaton?
+
+OK，兄弟们，太抽象辣！
+
+构造 LR(0) 自动机的过程和 NFA 转换为 DFA 的过程非常相似（实际上做的就是将 NFA 转换为 DFA）。
+
+<u>LR(0) 自动机的作用是用来识别文法的全部活前缀</u>。
+
+:::
+
+:::note Example
+
+$$
+  \begin{aligned}
+    S &\rightarrow AA \\
+    A &\rightarrow aA \mid b \\
+  \end{aligned}
+$$
+
+:::
+
+TODO:
+- Model of a LR Parser (Put an image there :-)
+- Structure of the LR Parsing Table
+  - ACTION and GOTO
+- LR Parsing Algorithm
+
 ### SLR(1)
+
+给定文法 $G$，对于增广文法 $G^{\prime}$，$G^{\prime}$ 的 SLR 预测分析表的构造方法：
+1. 构造 LR(0) 项集规范族 $C = \lbrace I_0, I_1, \cdots, I_n \rbrace$。
+2. 状态 $i$ 对应的 $\text{ACTION}$ 由下面的规则确定：
+   - 若 $[A \rightarrow \alpha \cdot a \beta] \in I_i$ 且 $\text{GOTO}(I_i, a) = I_j$ (其中 $a$ 必须是终结符），则 $\text{ACTION}(i, a) := shift \ j$。
+   - 若 $[A \rightarrow \alpha \cdot]\in I_i$，则 $\forall a \in \text{FOLLOW}(A), \text{ACTION}(i, a) := reduce \ A \rightarrow \alpha$。
+   - 若 $[S^{\prime} \rightarrow S] \in I_i$，则 $\text{ACTION}(i, \$) = accept$。
+   - 对于剩下的 $a$，$\text{ACTION}(i, a) = error$。
+
+   如果 $\text{ACTION}(i, a)$ 产生冲突 (即有两个或两个以上的可选动作)，那么我们就说文法 $G$ 就不是 SLR(1) 的。
+
+3. 状态 $i$ 对应的 $\text{GOTO}$ 由下面的规则确定：
+   - 若 $\text{GOTO}(I_i, A) = I_j$ (其中 $A$ 必须是非终结符)，则 $\text{GOTO}(i, A) = j$。
 
 ### LR(1)
 
