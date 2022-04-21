@@ -137,11 +137,25 @@ LR(k) VS LL(k):
 ### LR(0)
 
 **活前缀/可行前缀 (Viable Prefix)** 指的是规范句型的一个前缀，这种前缀不含句柄之后的任何符号。
+
+形式上，给定一个文法 $G$，如果存在一个具有下面形式的最右推导
+$$
+  S \xRightarrow[rm]{*} \alpha A \omega \xRightarrow[rm]{} \alpha \beta_1 \beta_2 \omega
+$$
+我们就称 $\gamma = (NT \cup T)^{*}$ 是 $G$ 的一个活前缀，且 $\gamma = \alpha \beta_1$。并称 $A \rightarrow \beta_1 \cdot \beta_2$ 是活前缀 $\gamma$ 的 **有效项 (Valid Item)**。一个活前缀一定有有效项，一个有效项可能与多个活前缀相关联。
+
 之所以称为活前缀，是因为在右边添加一些终结符之后，就可以使它成为一个规范句型。
+在 shift-reduce parser 中，栈中符号串始终是最右句型的一个活前缀，它最多包含但不会越过当前句型的句柄 (当前句型指的是，栈中符号串和输入符号串构成的句型)。
 
 :::info
 
 在 LR 分析过程中的任何时候，<u>栈里的符号串 (自底向上) 应该构成活前缀</u>，如果把输入串的剩余部分加在后边应成为规范句型。
+
+:::
+
+:::tip
+
+幸运的是，一个上下文无关文法的活前缀构成了一个正规语言，这说明我们可以用 DFA 来识别所有的活前缀。
 
 :::
 
@@ -247,7 +261,7 @@ $$
 接下来，给定文法 $G$ 的增广文法 $G^{\prime}$，我们就可以利用 $\text{CLOSURE}$ 和 $\text{GOTO}$ 来构造 **LR(0) 项目集规范族 (Canonical Collection of Sets of LR(0) Items)** $C$。
 
 ```algorithm Construction of Canonical Collection of Sets of LR(0) Items
-ItemSets(G')  // G' is the agumented grammar
+ItemSets(G')  // G' is the augmented grammar
 {
   C = { CLOSURE({S' -> ·S}) };  // C is the canonical collection of sets of LR(0) items
   repeat:
@@ -285,6 +299,10 @@ $$
 
 :::
 
+LR(0) Conflicts:
+- reduce/reduce conflict: Any state has two reduce items.
+- shift/reduce conflict: Any state has a shift item and a reduce item
+
 TODO:
 - Model of a LR Parser (Put an image there :-)
 - Structure of the LR Parsing Table
@@ -298,8 +316,8 @@ TODO:
 2. 状态 $i$ 对应的 $\text{ACTION}$ 由下面的规则确定：
    - 若 $[A \rightarrow \alpha \cdot a \beta] \in I_i$ 且 $\text{GOTO}(I_i, a) = I_j$ (其中 $a$ 必须是终结符），则 $\text{ACTION}(i, a) := shift \ j$。
    - 若 $[A \rightarrow \alpha \cdot]\in I_i$，则 $\forall a \in \text{FOLLOW}(A), \text{ACTION}(i, a) := reduce \ A \rightarrow \alpha$。
-   - 若 $[S^{\prime} \rightarrow S] \in I_i$，则 $\text{ACTION}(i, \$) = accept$。
-   - 对于剩下的 $a$，$\text{ACTION}(i, a) = error$。
+   - 若 $[S^{\prime} \rightarrow S] \in I_i$，则 $\text{ACTION}(i, \$) := accept$。
+   - 对于剩下的 $a$，$\text{ACTION}(i, a) := error$。
 
    如果 $\text{ACTION}(i, a)$ 产生冲突 (即有两个或两个以上的可选动作)，那么我们就说文法 $G$ 就不是 SLR(1) 的。
 
