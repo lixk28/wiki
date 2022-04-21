@@ -131,6 +131,30 @@ LR(k) VS LL(k):
 
 :::
 
+:::info An Ambiguous Grammar Can Never Be LR
+
+考虑下面的 dangling-else 文法：
+$$
+  S \rightarrow i E t S \mid i E t S e S
+$$
+
+如果我们有一个 shift-reduce parser 正处在下面的情况：
+
+| Stack | Input |
+| ----- | ----- |
+| $\$ \ \cdots i E t S$ | $e \cdots \ \$$ |
+
+我们无法确定 $iEtS$ 是否为一句柄，无论在它之下的栈内容是什么。此时，有两种可能的选择：
+- 将 $iEtS$ 归约为 $S$。
+- 将 $e$ 移进，期待下一个 $S$，来完成 $iEtSeS$。
+
+但我们不知道应该选择哪一个动作。因此，这个文法不是 LR(1) 的。
+
+需要指出的是，LR 分析技术可作修改，来适用于一些二义性文法。
+比如，上面的 dangling-else 文法也可用 LR 进行分析，我们可以规定当出现上面的情形时，将 $e$ 移进，而不是把 $iCtS$ 归约为 $S$，这样符合程序语言的一般规定。
+
+:::
+
 我们接下来要讨论的 LR 分析本质上都是寻找给定符号串的规范归约。
 规范归约的关键问题是确定和寻找句柄。
 
