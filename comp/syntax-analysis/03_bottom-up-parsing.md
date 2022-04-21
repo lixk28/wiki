@@ -348,6 +348,62 @@ TODO:
 3. 状态 $i$ 对应的 $\text{GOTO}$ 由下面的规则确定：
    - 若 $\text{GOTO}(I_i, A) = I_j$ (其中 $A$ 必须是非终结符)，则 $\text{GOTO}(i, A) = j$。
 
+SLR(1) 与 LR(0) 唯一的不同在于：
+- LR(0) 只要当栈中符号完整时，就进行归约。
+- SLR(1) 只有当输入的下一个 token 在 $\text{FOLLOW}(A)$ 中，而 $A$ 是将要归约到的非终结符，才进行归约。
+
+在 SLR(1) 识别活前缀的自动机中，一个状态允许同时存在 shift 和 reduce 项，也可以拥有多个 reduce 项。
+
 ### LR(1)
+
+LR(1) 也称为规范 LR。
+
+LR(1) Item = LR(0) Item + Lookahead Token
+$$
+  \lbrack A \rightarrow \alpha \cdot \beta, a \rbrack
+$$
+- $A \rightarrow \alpha \beta$ is a production.
+- $a$ is a terminal or the endmarker $\$$.
+
+:::info
+
+注意到，对于 $\lbrack A \rightarrow \alpha \cdot \beta, a \rbrack$，其中 $\beta \neq \epsilon$，lookahead对于这个 LR(1) item 没有任何作用。
+
+当 LR(1) item 具有形式 $\lbrack A \rightarrow \alpha \cdot \ , a \rbrack$ 时，只有当下一个输入符号为 $a$ 时，才会用产生式 $A \rightarrow \alpha$ 进行归约。
+
+:::
+
+我们说一个 LR(1) item 是活前缀 $\gamma = \delta \alpha$ 的有效项，如果存在一个最右推导 $S \xRightarrow[rm]{*} \delta A \omega \xRightarrow[rm]{} \delta \alpha \beta \omega$，其中 $a$ 是 $\omega$ 的起始符号，或者 $\omega = \epsilon$ 且 $a = \$$。
+
+构造 LR(1) 项目规范族的方法与 LR(0) 基本相同，需要修改的是 $\text{CLOSURE}$ 和 $\text{GOTO}$。
+
+```algorithm Compute CLOSURE
+CLOSURE(I)
+{
+  repeat:
+    for each item [A ➞ α‧Bβ, a] in I:
+      for each production B ➞ γ in G':
+        for each terminal b in FIRST(βa):
+          add [B ➞ ‧γ, b] to set I;
+  until: no more items are added to I;
+  return I;
+}
+```
+
+```algorithm Compute GOTO
+GOTO(I, X)
+{
+  initialize J to be the empty set;
+  for each item [A ➞ α‧Xβ, a] in I:
+    add item [A ➞ αX‧β, a] to set J;
+  return CLOSURE(J);
+}
+```
+
+:::note Example
+
+
+
+:::
 
 ### LALR(1)
