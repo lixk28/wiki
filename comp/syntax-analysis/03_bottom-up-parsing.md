@@ -367,9 +367,9 @@ $$
 
 :::info
 
-注意到，对于 $\lbrack A \rightarrow \alpha \cdot \beta, a \rbrack$，其中 $\beta \neq \epsilon$，lookahead对于这个 LR(1) item 没有任何作用。
+注意到，对于 $\lbrack A \rightarrow X_1 \cdots X_i \cdot X_{i+1} \cdots X_n, a \rbrack$，lookahead对于这个 LR(1) item 没有任何作用。这时，$X_1 \cdots X_i$ 在栈上，我们期望将 $X_{i+1} \cdots X_n$ 压到栈中，再归约为 $A$。
 
-当 LR(1) item 具有形式 $\lbrack A \rightarrow \alpha \cdot \ , a \rbrack$ 时，只有当下一个输入符号为 $a$ 时，才会用产生式 $A \rightarrow \alpha$ 进行归约。
+当 LR(1) item 具有形式 $\lbrack A \rightarrow X_1 \cdots X_n \cdot \ , a \rbrack$ 时，这时产生式右部 $X_1 \cdots X_n$ 都在栈上，只有当下一个输入符号为 $a$ 时，才会进行归约。
 
 :::
 
@@ -377,7 +377,7 @@ $$
 
 构造 LR(1) 项目规范族的方法与 LR(0) 基本相同，需要修改的是 $\text{CLOSURE}$ 和 $\text{GOTO}$。
 
-```algorithm Compute CLOSURE
+```algorithm title="Computing CLOSURE"
 CLOSURE(I)
 {
   repeat:
@@ -390,7 +390,7 @@ CLOSURE(I)
 }
 ```
 
-```algorithm Compute GOTO
+```algorithm title="Computing GOTO"
 GOTO(I, X)
 {
   initialize J to be the empty set;
@@ -400,6 +400,42 @@ GOTO(I, X)
 }
 ```
 
+```algorithm title="Constructing of LR(1) Item Sets"
+ItemSets(G')
+{
+  initialize C to { CLOSURE( { [S' ➞ ‧S, $] } ) };
+  repeat:
+    for each set of items I in C:
+      for each grammar symbol X:
+        if GOTO(I, X) is not empty and not in C:
+          add GOTO(I, X) to C;
+  until: no new set of items are added to C;
+}
+```
+
+:::note Example
+
+$$
+  \begin{aligned}
+    S &\rightarrow AA \\
+    A &\rightarrow aA \mid b
+  \end{aligned}
+$$
+
+:::
+
+Given an augmented grammar $G^{\prime}$, construction of canonical LR parsing table:
+1. Construct $C^{\prime} = \lbrace I_0, I_1, \cdots, I_n \rbrace$, the collection of sets of LR(1) items for $G^{\prime}$.
+2. The $\text{ACTION}$ of state $i$ corresponding to item set $I_i$ is determined as follows:
+   - If $\lbrack A \rightarrow \alpha \cdot a \beta, \ b \rbrack \in I_i$ and $\text{GOTO}(I_i, a) = I_j$, then $\text{ACTION}(i, a) := shift \ j$. Note that here $a$ must be a terminal.
+   - If $\lbrack A \rightarrow \alpha \cdot, \ a \rbrack \in I_i$, then $\text{ACTION}(i, a) := reduce \ A \rightarrow \alpha$. Note that here $A \neq S^{\prime}$.
+   - If $\lbrack S^{\prime} \rightarrow S \cdot, \ \$ \rbrack \in I_i$, then $\text{ACTION}(i, \$) := accept$. Actually $\lbrack S^{\prime} \rightarrow S \cdot, \ \$ \rbrack$ is a special reduce item, it indicates the input is accepted.
+
+   If any action determined from the above rules has conflicts, we say the grammar is not LR(1).
+   (shift/reduce conflicts or reduce/reduce conflicts)
+3. The $\text{GOTO}$ of state $i$ corresponding to item set $I_i$ is determined by:
+   - If $\text{GOTO}(I_i, A) = I_j$, then $\text{GOTO}(i, A) := j$. Note that here $A$ must be a nonterminal.
+
 :::note Example
 
 
@@ -407,3 +443,17 @@ GOTO(I, X)
 :::
 
 ### LALR(1)
+
+LALR(1) 是 LR(1) 和 SLR(1) 的折衷。
+LALR(1) 通过将 LR(1) 相似的状态合并来缩小生成的分析表。
+
+LALR(1) 合并具有相同 **核心 (Core)** 的状态。
+- Core: LR(1) items minus the lookahead.
+
+:::note Example
+
+
+
+:::
+
+合并状态可能会引入 reduce/reduce 冲突，但不会引入 shift/reduce 冲突。
