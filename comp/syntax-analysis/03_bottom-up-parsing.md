@@ -354,6 +354,10 @@ SLR(1) 与 LR(0) 唯一的不同在于：
 
 在 SLR(1) 识别活前缀的自动机中，一个状态允许同时存在 shift 和 reduce 项，也可以拥有多个 reduce 项。
 
+A grammar is SLR(1) if and only if, for any state $I_i$, the following two conditions are statisfied:
+- For any item $A \rightarrow \alpha \cdot t \beta$ in $I_i$ with $t$ is a terminal, there is no reduce item $B \rightarrow \gamma \cdot$ in $I_i$ with $t \in \text{FOLLOW}(B)$.
+- For any two reduce items $A \rightarrow \alpha \cdot$ and $B \rightarrow \beta \cdot$ in $I_i$, $\text{FOLLOW}(A) \cap \text{FOLLOW}(B) = \emptyset$.
+
 ### LR(1)
 
 LR(1) 也称为规范 LR。
@@ -442,6 +446,10 @@ Given an augmented grammar $G^{\prime}$, construction of canonical LR parsing ta
 
 :::
 
+A grammar is LR(1) if and only if, for any state $I_i$, the following two conditions are satisfied:
+- For any item $\lbrack A \rightarrow \alpha \cdot t \beta, a \rbrack$ in $I_i$ with $t$ is a terminal, there is no item in $I_i$ of the form $\lbrack B \rightarrow \gamma \cdot, t \rbrack$. (otherwise there is a shift-reduce conflict)
+- There are no two items in $I_i$ of the form $\lbrack A \rightarrow \alpha \cdot, a\rbrack$ and $\lbrack B \rightarrow \beta \cdot, a \rbrack$. (otherwise there is a reduce-reduce conflict)
+
 ### LALR(1)
 
 LALR(1) 是 LR(1) 和 SLR(1) 的折衷。
@@ -456,4 +464,33 @@ LALR(1) 合并具有相同 **核心 (Core)** 的状态。
 
 :::
 
-合并状态可能会引入 reduce/reduce 冲突，但不会引入 shift/reduce 冲突。
+合并状态可能会引入 reduce-reduce 冲突，但不会引入 shift-reduce 冲突。
+- shift-reduce conflicts are not introduced by merging:
+
+  If state $I_{ij}$ is formed by merging $I_i$ and $I_j$, and $I_{ij}$ contains:
+  - $\lbrack A \rightarrow \alpha \cdot, a \rbrack$
+  - $\lbrack B \rightarrow \beta \cdot a \gamma, b \rbrack$
+
+  Then, because the LR(1) item and LALR(1) item being merged have the same cores,
+  either $I_i$ or $I_j$ must contain $\lbrack A \rightarrow \alpha \cdot, a \rbrack$,
+  and it must have an item $[B \rightarrow \beta \cdot a \gamma, c]$ for some $c$.
+  Well then this state has the same shift-reduce conflict, which means that this grammar is not LR(1).
+
+- reduce-reduce conflicts can be introduced by merging:
+
+  For instance, state $I_i$ contains:
+  - $\lbrack A \rightarrow \alpha \cdot, a \rbrack$
+  - $\lbrack B \rightarrow \beta \cdot, b \rbrack$
+
+  while state $I_j$ contains:
+  - $\lbrack A \rightarrow \alpha \cdot, c \rbrack$
+  - $\lbrack B \rightarrow \beta \cdot, a \rbrack$
+
+  and the state $I_{ij}$ merged by $I_i$ and $I_j$ contains:
+  - $\lbrack A \rightarrow \alpha \cdot, a / c \rbrack$
+  - $\lbrack B \rightarrow \beta \cdot, a / b \rbrack$
+
+  So when in state $I_ij$, if the lookahead symbol is $a$, there is an ambiguity in choosing which production to apply, either $A \rightarrow \alpha$ or $B \rightarrow \beta$ is OK.
+  That is, there is a reduce-reduce conflict.
+
+  A grammar is LALR(1) if and only if no conflicts are brought in merging LR(1) states.
