@@ -205,8 +205,12 @@ const config = {
 
   themeConfig: {
     metadata: [{name: 'keywords', content: 'wiki, tech, computer science'}],
-    hideableSidebar: true,
-    autoCollapseSidebarCategories: false,
+    docs: {
+      sidebar: {
+        hideable: true,
+        autoCollapseCategories: false,
+      },
+    },
     colorMode: {
       defaultMode: 'light',
       disableSwitch: false,
