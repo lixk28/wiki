@@ -17,10 +17,6 @@ If we implement the nodes of the parse tree by records or objects (a `struct` in
 
 :::
 
-属性可以进行计算和传递，**属性规则 (Attribute Rule)** 是在同一个产生式中，相关联的属性求值规则。
-
-**属性文法 (Attribute Grammar)** 是上下文无关文法在语义上的扩展，形式上可定义为一个三元组 $A = (G, V, E)$，其中 $G$ 代表文法，$V$ 代表属性集，$E$ 代表属性规则集。
-
 A **Syntax-Directed Definition (SDD, 语法制导定义)** is a context-free grammar together with attributes and rules.
 - Attributes are asscociated with grammar symbols. (文法符号和语义属性相关联)
 - Rules are associated with productions. (产生式和语义规则相关联)
@@ -35,7 +31,7 @@ A **Syntax-Directed Definition (SDD, 语法制导定义)** is a context-free gra
 
 综合属性用于自底向上求值，继承属性用于自顶向下求值。
 
-终结符可以拥有综合属性，但不能拥有继承属性。
+终结符可以拥有综合属性，但没有继承属性，终结符的综合属性可以从词法分析阶段获得 (比如数字的值)。
 
 
 :::note SDD of Arithmetic Expression Grammar
@@ -43,17 +39,75 @@ A **Syntax-Directed Definition (SDD, 语法制导定义)** is a context-free gra
 | $\textsf{Production}$             | $\textsf{Semantic Rules}$ |
 | --------------------------------- | ------------------------- |
 | $L \rightarrow E$                 | $print(E.val)$            |
-| $E \rightarrow E_1 + T$           | $E.val = E_1.val + T.val$ |
+| $E \rightarrow E + T$             | $E.val = E_1.val + T.val$ |
 | $E \rightarrow T$                 | $E.val = T.val$           |
-| $T \rightarrow T_1 * F$           | $T.val = T_1.val * F.val$ |
+| $T \rightarrow T * F$             | $T.val = T_1.val * F.val$ |
 | $T \rightarrow F$                 | $T.val = F.val$           |
 | $F \rightarrow \lparen E \rparen$ | $F.val = E.val$           |
 | $F \rightarrow num$               | $F.val = num.val$         |
 
 :::
 
-
-
 ## Syntax-Directed Translation Scheme
 
-**Syntax-Directed Translation Scheme (SDT, 语法制导翻译方案)** is
+**Syntax-Directed Translation Scheme (SDT, 语法制导翻译方案)** is a context-free grammar with program fragments embedded within production bodies.
+- The program fragments are called **semantic actions (语义动作)**, they can appear at any position within a production body.
+- By convention, we place curly braces around actions.
+
+Typically, SDT is implemented during parsing, but you can also first build a parse tree and then perform the SDT actions in preorder traversal of the parse tree.
+
+:::note An Example of Type Declaration
+
+Grammar ($\textbf{int}$ declaration):
+$$
+  \begin{aligned}
+    D &\rightarrow T \ L \\
+    T &\rightarrow \textbf{int} \\
+    L &\rightarrow L, \ \textbf{id} \\
+    L &\rightarrow \textbf{id} \\
+  \end{aligned}
+$$
+
+SDD:
+$$
+  \begin{aligned}
+    D &\rightarrow T \ L \quad &&\lbrace L.type = T.type \rbrace \\
+    T &\rightarrow \textbf{int} \quad &&\lbrace T.type = \text{integer} \rbrace \\
+    L &\rightarrow L, \ \textbf{id} \quad &&\lbrace L_1.type = L.type \rbrace, \lbrace \text{add\_type}(\textbf{id}, L.type) \rbrace \\
+    L &\rightarrow \textbf{id} \quad &&\lbrace \text{add\_type}(\textbf{id}, L.type) \rbrace
+  \end{aligned}
+$$
+
+SDT:
+$$
+  \begin{aligned}
+    D &\rightarrow T \ \lbrace L.type = T.type \rbrace \ L \\
+    T &\rightarrow \textbf{int} \ \lbrace T.type = \text{integer} \rbrace \\
+    L &\rightarrow \lbrace L_1.type = L.type \rbrace \ L, \lbrace \text{add\_type}(\textbf{id}, L.type) \rbrace \ \textbf{id} \\
+    L &\rightarrow \lbrace \text{add\_type}(\textbf{id}, L.type) \rbrace \textbf{id}
+  \end{aligned}
+$$
+
+$\text{add\_type}(\textbf{id}, \text{type})$ means that add an entry $(\textbf{id}, \text{type})$ to the symbol table.
+
+:::
+
+:::question What's the difference between SDD and SDT?
+
+SDD just defines the attributes of grammar symbols and semantic rules associated with productions, attributes and rules are attached to productions.
+
+SDT specifies the position and execution order of each semantic rules, semantic rules are embedded in the rhs of productions, making them semantic actions.
+
+SDD 只定义了语法属性和语义规则，SDT 进一步确定了语义规则在每一个产生式中具体的实施顺序。
+
+:::
+
+In practice, syntax-directed translation may involves **side effects (副作用)**, they are additional actions besides attribute calculations (属性值计算之外的动作或功能).
+- A calculator may print the result of an expression. (计算器输出表达式的值)
+- A code generator may add the type of an identifier to the symbol table. (翻译过程中添加标识符到符号表)
+
+**Attribute grammar (属性文法)** is a SDD with no side effects (没有副作用的 SDD). The value of an attribute is purely defined by the values of other attributes and constants.
+
+**Anotated parse tree (标注分析树)** is a parse tree showing the values of its attributes.
+- Each node shows its attribute values.
+- Actions can also be annotated.
