@@ -255,3 +255,81 @@ Postfix SDT can be implemented during LR parsing by executing the actions when r
 Convert L-attributed SDD to SDT:
 - Embed the action that computes the inherited attributes for a nonterminal $A$ immediately before that occurrence of $A$ in the body of that production. (将计算非终结符 $A$ 的继承属性的语义动作插入到产生式右部紧靠 $A$ 之前)
 - Place the actions that compute a synthesized attribute for the head of a production at the end of the body of that production. (将计算产生式左部符号的综合属性的语义动作放在产生式的末尾)
+
+:::note Example
+
+L-attributed SDD for arithmetic expressions:
+
+| $\textsf{Production}$                      | $\textsf{Semantic Rules}$ |
+| ------------------------------------------ | ------------------------- |
+| $L \rightarrow E$                          | $\text{print}(E.val)$ |
+| $E \rightarrow T \ E^{\prime}$             | $E.val = E^{\prime}.syn \\ E^{\prime}.inh = T.val$ |
+| $E^{\prime} \rightarrow + T \ E^{\prime}$  | $E^{\prime}.syn = E^{\prime}_1.syn \\ E^{\prime}_1.inh = E^{\prime}.inh + T.val$ |
+| $E^{\prime} \rightarrow \epsilon$          | $E^{\prime}.syn = E^{\prime}.inh$ |
+| $T \rightarrow F \ T^{\prime}$             | $T.val = T^{\prime}.syn \\ T^{\prime}.inh = F.val$ |
+| $T^{\prime} \rightarrow * F \ T^{\prime}$  | $T^{\prime}.syn = T^{\prime}_1.syn \\ T^{\prime}_1.inh = T^{\prime}inh * F.val$ |
+| $T^{\prime} \rightarrow \epsilon$          | $T^{\prime}.syn = T^{\prime}.inh$ |
+| $F \rightarrow \lparen E \rparen$          | $F.val = E.val$ |
+| $F \rightarrow \textbf{digit}$             | $F.val = \textbf{digit}.val$ |
+
+Its SDT:
+$$
+  \begin{aligned}
+    L &\rightarrow E \ \lbrace \text{print}(E.val) \rbrace \\
+    E &\rightarrow T \ \lbrace E^{\prime}.inh = T.val \rbrace \ E^{\prime} \ \lbrace E.val = E^{\prime}.syn \rbrace \\
+    E^{\prime} &\rightarrow + T \ \lbrace E_1^{\prime}.inh = E^{\prime}.inh + T.val \rbrace \ E^{\prime} \ \lbrace E^{\prime}.syn = E_1^{\prime}.syn \rbrace \\
+    E^{\prime} &\rightarrow \epsilon \ \lbrace E^{\prime}.syn = E^{\prime}.inh \rbrace \\
+    T &\rightarrow F \ \lbrace T^{\prime}.inh = F.val \rbrace \ T^{\prime} \ \lbrace T.val = T^{\prime}.syn \rbrace \\
+    T^{\prime} &\rightarrow * F \ \lbrace T_1^{\prime}.inh = T^{\prime}.inh * F.val \rbrace \ T^{\prime} \ \lbrace T^{\prime}.syn = T_1^{\prime}.syn \rbrace \\
+    T^{\prime} &\rightarrow \epsilon \ \lbrace T^{\prime}.syn = T^{\prime}.inh \rbrace \\
+    F &\rightarrow \lparen E \rparen \ \lbrace F.val = E.val \rbrace \\
+    F &\rightarrow \textbf{digit} \ \lbrace F.val = \textbf{digit}.val \rbrace
+  \end{aligned}
+$$
+
+:::
+
+## Semantic Translation during Parsing
+
+If the grammar is LL-parsable, then the SDT can be implemented during LL or LR parsing.
+- Semantic Translation during LL parsing
+  - Recursive descent parser: Augment non-terminal functions to both parse and handle attributes
+  - Predictive parser: Extend the parser stack to hold actions and certain data items needed for attribute evaluation
+- Semantic Translation during LR parsing
+  - Involve marker to rewrite grammar
+
+### Semantic Translation during Recursive Descent Parsing
+
+A recursive descent parser has a function for each nonterminal $A$:
+- Synthesized attributes: Evaluate at end of function as <Highlight color="#3578e5">return value</Highlight>
+- Inherited attributes: Pass as <Highlight color="#3578e5">arguments</Highlight> to function
+  - Values may come from parent or siblings
+  - L-attributed SDD guarantees they have been computed
+
+:::note Example
+
+
+
+:::
+
+### Semantic Translation during Predictive Parsing
+
+Extend the parse stack to hold actions and certain data items needed for attribute evaluation. (扩展语法分析栈)
+- Action-record (动作记录): Represent the actions to be executed
+- Synthesized-record (综合记录): Hold synthesized attributes for non-terminals
+
+Manage attributes on stack:
+- The inherited attributes of a nonterminal $A$ are placed in the stack record that represents that nonterminal
+- The synthesized attributes of a nonterminal $A$ are placed in a seperate synthesized-record that is implemented below $A$
+
+:::note Example
+
+
+
+:::
+
+### Semantic Translation during LR Parsing
+
+This part is so fxxking confusing!
+
+A **marker (标记符号)** is a nonterminal marking a location equidistant from the symbol that has an inherited attribute.
