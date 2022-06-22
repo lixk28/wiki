@@ -32,13 +32,11 @@ Symbol table is usually discared after generating executable binary, because mac
 - To display symbol names instead of addresses in debuggers (如果不包含符号表信息，调试时无法查看变量的信息)
 - `-g` option for gcc to include debug symbol tables
 
-## Binding
+## Binding and Scoping
 
 **Binding (绑定)** matches identifier use with definition. (匹配符号的使用和定义)
 - Definition: Associating an id with a memory allocation
 - Binding associates an id use with a location, and is an essential step before machine code generation
-
-## Scope
 
 **Scope (作用域)** is a program region where a definition can be bound. (可以与定义绑定的程序区域)
 - Uses of identifier in the scope is bound to that definition
@@ -87,6 +85,8 @@ Static scoping:
 
 ## Implementation of Symbol Table
 
+### Symbol Table Structure
+
 Symbol table is an important data stucture in compiler, the performance of compiler's frontend (lexical, syntax, semantic analysis) is affected by symbol table access time. (符号表访问时间影响前端性能)
 
 Common data structures for symbol table:
@@ -113,4 +113,53 @@ Most compilers choose hash table for its quick access time. (大多数编译器�
 
 :::
 
+Maintaining symbol table:
+- `enter_scope()`: start a new scope
+- `exit_scope()`: exit current scope
+- `find_symbol(x)`: find the information about symbol x
+- `add_symbol(x)`: add symbol x to the symbol table
+- `check_symbol(x)`: check if symbol x is defined in current scope
+
+### Handling Symbol Table with Scopes
+
+Organize all symbol tables into a scope stack
+- An individual symbol table for each scope, stack holds on entry for each <u>open scope</u>
+- The innermost scope (current scope) is on the top of stack
+- Stack push/pop when entering/exiting a scope
+  - Create a new symbol table to hold all variables declared in that scope
+  - Push/pop the pointer to the symbol table
+
+TODO: an image here.
+
+Cons of stacking symbol tables:
+- Inefficient searching due to multiple hash table lookups: Search from the top of stack, and look up all the symbol tables held by the stack in worst case. All global variables will be at the bottom of the stack.
+- Inefficient use of memory due to multiple hash tables: The number of symbol tables is the number of current anticipated scopes.
+
+Single symbol table for all scopes using chaining (preferred):
+- For each identifier, insert at the front of chain with scope level k, search will fetch the front of chain
+- Remove all symbols with level k when exiting level k scope
+
+TODO: an image here.
+
+Pros of chaining symbol table:
+- Lookup requires only a single hash table access
+- Save memory due to single hash table
+
+Cons of chaining symbol table:
+- Unsuitable for class scopes (only block scopes)
+- Exiting scope is slightly more expensive
+
+### Symbol Table Entry
+
+TODO
+
 ## Type and Type Checking
+
+**Type (类型)** is a set of values and a set of operations on these values.
+
+**Type checking (类型检查)** verifies type consistency across the program. (类型一致性检查)
+- A program is said to be **type consistent (类型一致的)** if all operators are consistent with the operand types
+- Much of what we do in semantic analysis is type checking
+
+- **Static type checking (静态类型检查)** (at compile time)
+- **Dynamic type checking (动态类型检查)** (at execution time)
