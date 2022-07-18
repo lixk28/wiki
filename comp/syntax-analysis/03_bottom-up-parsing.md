@@ -79,11 +79,13 @@ $$
 
 :::
 
-:::question Why Handle?
+<details>
+
+<summary>Why Handle?</summary>
 
 
 
-:::
+</details>
 
 ## Shift-Reduce Parsing
 
@@ -117,7 +119,9 @@ LR(k): Parsers of LR family.
 - **k**: Use <Highlight color="#3578e5">k</Highlight> input symbols of lookahead to make decisions.
   - k = 0 or 1 are of particular interests, k is assumed to be 1 when omitted.
 
-:::question Why LR Parsers?
+<details>
+
+<summary>Why LR Parsers?</summary>
 
 LR(k) VS LL(k):
 - LR(k) is more powerful than LL(k).
@@ -129,7 +133,7 @@ LR(k) VS LL(k):
 - LR(k) is as convenient as LL(k).
   - Can generate automatically from grammar (YACC, Bison).
 
-:::
+</details>
 
 :::info An Ambiguous Grammar Can Never Be LR
 
@@ -313,7 +317,9 @@ LR(0) 自动机 (LR(0) Automaton)
 - 自动机的状态转换由 $\text{GOTO}$ 函数给出。$\text{GOTO}(I_j, X) = I_k$ 表示状态 $j$ 到状态 $k$ 有一条 $X$ 边。
 - 自动机的起始状态是 $\text{CLOSURE}({S^{\prime} \rightarrow \cdot S})$，所有的状态都是接受状态。
 
-:::question What Is The Use Of LR(0) Automaton?
+<details>
+
+<summary>What Is The Use Of LR(0) Automaton?</summary>
 
 OK，兄弟们，太抽象辣！
 
@@ -321,7 +327,7 @@ OK，兄弟们，太抽象辣！
 
 <u>LR(0) 自动机的作用是用来识别文法的全部活前缀</u>。
 
-:::
+</details>
 
 :::note Example
 

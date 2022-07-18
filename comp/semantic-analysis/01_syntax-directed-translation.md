@@ -13,11 +13,13 @@ import Highlight from '@site/src/components/Highlight';
 
 If $X$ is a symbol and $a$ is one of its attributes, then we write $X.a$ to denote tha value of $a$ at a particular parse-tree node labeled $X$.
 
-:::question How to Implement Attributes?
+<details>
+
+<summary>How to Implement Attributes?</summary>
 
 If we implement the nodes of the parse tree by records or objects (a `struct` in C for instance), then the attributes of $X$ can be implemented by data fields in the records that represent the nodes for $X$.
 
-:::
+</details>
 
 A **Syntax-Directed Definition (SDD, 语法制导定义)** is a context-free grammar together with attributes and rules.
 - Attributes are asscociated with grammar symbols. (文法符号和语义属性相关联)
@@ -94,7 +96,9 @@ $\text{add\_type}(\textbf{id}, \text{type})$ means that add an entry $(\textbf{i
 
 :::
 
-:::question What's the difference between SDD and SDT?
+<details>
+
+<summary>What's the difference between SDD and SDT?</summary>
 
 SDD just defines the attributes of grammar symbols and semantic rules associated with productions, attributes and rules are attached to productions.
 
@@ -102,7 +106,7 @@ SDT specifies the position and execution order of each semantic rules, semantic 
 
 SDD 只定义了语法属性和语义规则，SDT 进一步确定了语义规则在每一个产生式中具体的实施顺序。
 
-:::
+</details>
 
 In practice, syntax-directed translation may involves **side effects (副作用)**, they are additional actions besides attribute calculations (属性值计算之外的动作或功能).
 - A calculator may print the result of an expression. (计算器输出表达式的值)

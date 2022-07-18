@@ -71,7 +71,9 @@ Two types of scoping:
   echo $greeting  # print hello world
   ```
 
-:::question Static Scoping or Dynamic Scoping
+<details>
+
+<summary>Static Scoping or Dynamic Scoping?</summary>
 
 Dynamic scoping:
 - All bindings are done at execution time
@@ -81,7 +83,7 @@ Static scoping:
 - Leads to fewer programmer errors, bindings are determined by lexical structure of source code
 - Leads to more efficient code, compilers can determine bindings at compile time and translate identifier directly to memory location
 
-:::
+</details>
 
 ## Implementation of Symbol Table
 

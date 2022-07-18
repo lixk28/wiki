@@ -16,17 +16,13 @@
   --ifm-font-size-base: 17.6px;
   --ifm-code-font-size: 95%;
 
-  --ra-admonition-color-tip: #f1fdf9;
-  --ra-admonition-color-tip-left: #00bf88;
+  --ifm-color-success-contrast-background: #f1fdf9;
+  --ifm-color-success-dark: #00bf88;
 
-  --ra-admonition-color-caution: #fffbf5;
-  --ra-admonition-color-caution-left: #f0ad4e;
+  --ifm-color-warning-contrast-background: #fffbf5;
+  --ifm-color-warning-dark: #f0ad4e;
 
-  --ra-admonition-color-danger: #ffebec;
-
-  --ra-admonition-color-question: #f7f7ff;
-  --ra-admonition-color-question-left: #8a2be2;
-  --ra-admonition-color-question-text: #1e002e;
+  --ifm-color-danger-contrast-background: #ffebec;
 
   --ifm-blockquote-border-left-width: 5px;
 }
@@ -40,10 +36,6 @@
   --ifm-color-primary-light: #29d5b0;
   --ifm-color-primary-lighter: #32d8b4;
   --ifm-color-primary-lightest: #4fddbf;
-
-  --ra-admonition-color-question: #2a044e;
-  --ra-admonition-color-question-left: #8a2be2;
-  --ra-admonition-color-question-text: #faf2ff
 }
 
 .docusaurus-highlight-code-line {
@@ -73,56 +65,4 @@
 [data-theme='dark'] .header-github-link::before {
   background: url("data:image/svg+xml,%3Csvg viewBox='0 0 24 24' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath fill='white' d='M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12'/%3E%3C/svg%3E")
     no-repeat;
-}
-
-.admonition h5 {
-  text-transform: capitalize !important;
-}
-
-[data-theme='light'] .admonition-tip, .admonition-success {
-  background-color: var(--ra-admonition-color-tip);
-  border-left-color: var(--ra-admonition-color-tip-left);
-}
-
-[data-theme='light'] .admonition-caution {
-  background-color: var(--ra-admonition-color-caution);
-  border-left-color: var(--ra-admonition-color-caution-left);
-}
-
-[data-theme='light'] .admonition-warning, .admonition-danger {
-  background-color: var(--ra-admonition-color-danger);
-}
-
-.admonition-question {
-  --ifm-code-background: var(--ifm-alert-background-color-highlight);
-  --ifm-link-color: var(--ifm-alert-foreground-color);
-  --ifm-link-hover-color: var(--ifm-alert-foreground-color);
-  --ifm-link-decoration: underline;
-  --ifm-tabs-color: var(--ifm-alert-foreground-color);
-  --ifm-tabs-color-active: var(--ifm-alert-foreground-color);
-  --ifm-tabs-color-active-border: var(--ifm-alert-border-color);
-
-  background-color:  var(--ra-admonition-color-question);
-
-  border-color: var(--ifm-alert-border-color);
-  border-style: solid;
-  border-width: var(--ifm-alert-border-width);
-  border-left-color: var(--ra-admonition-color-question-left);
-  border-left-width: var(--ifm-alert-border-left-width);
-  border-radius: var(--ifm-alert-border-radius);
-
-  box-shadow: var(--ifm-alert-shadow);
-  color: var(--ra-admonition-color-question-text);
-  padding: var(--ifm-alert-padding-vertical) var(--ifm-alert-padding-horizontal);
-
-  margin-bottom: 1em;
-}
-
-.admonition-question .admonition-icon svg {
-  display: inline-block;
-  height: 22px;
-  width: 22px;
-  stroke-width: 0;
-  fill: var(--ra-admonition-color-question-text);
-  stroke: var(--ra-admonition-color-question-text);
 }

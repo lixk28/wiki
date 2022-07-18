@@ -5,7 +5,7 @@ sidebar_position: 0
 
 # Semantic Analysis
 
-:::question Why Semantic Analysis?
+:::info Why Semantic Analysis?
 
 - Semantics of a language is much more difficult to describe than syntax.
   - Syntax describes the proper form of the programs (形式)

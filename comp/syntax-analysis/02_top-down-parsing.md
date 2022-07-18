@@ -7,7 +7,9 @@ import Highlight from '@site/src/components/Highlight';
 
 # Top-Down Parsing
 
-:::question What is parsing?
+<details>
+
+<summary>What is parsing?</summary>
 
 文法递归定义了一种语言的语法，**语法分析器 (Parser)** 的工作就是根据定义的文法，将词法分析器输出的 token list
 作为输入 (token list 就相当于语言的一个句子)，构造出 token list 的推导。
@@ -16,7 +18,7 @@ import Highlight from '@site/src/components/Highlight';
 - 确定符号串 (即 token list) 是否可以从文法推导出来，不能的话需要报告错误并终止。
 - 构建推导符号串的语法分析树，作为输出传递给编译器的下一个阶段。
 
-:::
+</details>
 
 :::tip Parsing Types
 
@@ -271,11 +273,13 @@ Given grammar $G(T, NT, S, P)$，$\text{FIRST}$ and $\text{FOLLOW}$ are defined 
 
 :::
 
-:::question Why Need FIRST And FOLLOW?
+<details>
+
+<summary>Why Need FIRST And FOLLOW?</summary>
 
 
 
-:::
+</details>
 
 ## LL(1)
 
@@ -336,7 +340,7 @@ $$
 
 :::
 
-:::question How To Identify Whether A Grammar Is LL(1)?[^3]
+:::info How To Identify Whether A Grammar Is LL(1)?[^3]
 
 一个文法是 LL(1) 的当且仅当它既没有 FIRST/FIRST conflicts，也没有 FIRST/FOLLOW conflicts。
 
@@ -384,11 +388,13 @@ report success; // stack is empty
 
 :::
 
-:::question Why not use LL(0) or LL(k)?
+<details>
+
+<summary>Why not use LL(0) or LL(k)?</summary>
 
 
 
-:::
+</details>
 
 ### Error Recovery
 
