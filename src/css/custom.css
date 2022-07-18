@@ -4,6 +4,11 @@
  * work well for content-centric websites.
  */
 
+@font-face {
+  font-family: lxgw;
+  src: url(@site/static/font/LXGWWenKaiScreen.ttf);
+}
+
 /* You can override the default Infima variables here. */
 :root {
   --ifm-color-primary: #3578e5; /* #25c2a0 */
@@ -13,7 +18,10 @@
   --ifm-color-primary-light: #4e89e8; /* #33925d */
   --ifm-color-primary-lighter: #5a91ea; /* #359962 */
   --ifm-color-primary-lightest: #80aaef; /* #3cad6e */
+
+  --ifm-font-family-base: 'lxgw';
   --ifm-font-size-base: 17.6px;
+
   --ifm-code-font-size: 95%;
 
   --ifm-color-success-contrast-background: #f1fdf9;
