@@ -1,1 +1,0 @@
-"use strict";(self.webpackChunkwiki=self.webpackChunkwiki||[]).push([[955],{4454:function(s){s.exports=JSON.parse('{"name":"docusaurus-plugin-content-docs","id":"tmux"}')}}]);

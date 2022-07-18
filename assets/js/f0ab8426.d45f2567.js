@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunkwiki=self.webpackChunkwiki||[]).push([[296],{8474:s=>{s.exports=JSON.parse('{"name":"docusaurus-plugin-content-docs","id":"vim"}')}}]);
